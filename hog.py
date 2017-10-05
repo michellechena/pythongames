@@ -24,14 +24,14 @@ def roll_dice(num_rolls, dice=six_sided):
    
     sum = 0
     check = False
-    for i in range(num_rolls):
-        k = dice()
-        if k == 1:
+    for _ in range(num_rolls):
+        score = dice()
+        if score == 1:
             check = True
         else:
-            sum += k
-    if check == True:
-        return 1
+            sum += score
+    if check:
+        return True
     else:
         return sum
     # END PROBLEM 1
@@ -119,15 +119,15 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     # print('Game started: \n'
     #       'Move - %d player1 = %d player2 = %d' % (turn, score0, score1))
 
+    if is_swap(score0, score1):
+        score0, score1 = score1, score0
+
     while score0 < goal and score1 < goal:
         if (player==0):
             score0 += take_turn(strategy0(score0, score1), score1, dice)
-            if is_swap(score0, score1):
-                score0, score1 = score1, score0
+
         else:
             score1 += take_turn(strategy1(score1, score0), score0, dice)
-            if is_swap(score1, score0):
-                score1, score0 = score0, score1
 
         if (score0 >= 100 or score1 >= 100):
             return score0, score1
@@ -135,15 +135,6 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
         player = other(player)
 
         say = say(score0, score1)
-
-
-        # print('Move - %d player1 = %d player2 = %d' % (turn, score0, score1))
-    #
-    # if score0 >= goal:
-    #     print('The first Player won')
-    # else:
-    #     print('The second Player won')
-
     # END PROBLEM 5
     return score0, score1
 
